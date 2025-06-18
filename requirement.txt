@@ -4,4 +4,4 @@ pandas
 numpy
 matplotlib
 seaborn
-joblib
+joblib==1.2.0
