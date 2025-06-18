@@ -46,8 +46,31 @@ if submitted:
     st.write(f"**Suhu:** {suhu}°C")
     st.write(f"**TDS:** {tds} mg/L")
 
+    # Notifikasi dan Rekomendasi
     if kualitas == 'Buruk':
         st.error("⚠️ Kualitas air **BURUK** berdasarkan hasil model.")
+
+        # Tambahan rekomendasi berdasarkan parameter
+        rekomendasi = []
+
+        if ph < 6.5:
+            rekomendasi.append("- pH terlalu rendah. Tambahkan kapur (CaCO₃) atau gunakan air basa.")
+        elif ph > 8.5:
+            rekomendasi.append("- pH terlalu tinggi. Tambahkan asam humat atau ganti sebagian air dengan air segar.")
+
+        if suhu < 20:
+            rekomendasi.append("- Suhu terlalu rendah. Gunakan pemanas air atau pindahkan sistem ke tempat yang lebih hangat.")
+        elif suhu > 30:
+            rekomendasi.append("- Suhu terlalu tinggi. Tambahkan peneduh atau sistem pendingin.")
+
+        if tds > 1000:
+            rekomendasi.append("- TDS terlalu tinggi. Ganti sebagian air atau kurangi pakan ikan.")
+
+        if rekomendasi:
+            st.markdown("#### 💡 Rekomendasi Perbaikan:")
+            for item in rekomendasi:
+                st.markdown(f"- {item}")
+
     elif kualitas == 'Cukup':
         st.warning("⚠️ Kualitas air **CUKUP** berdasarkan hasil model.")
     elif kualitas == 'Baik':
