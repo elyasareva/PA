@@ -3,7 +3,10 @@ import pandas as pd
 import joblib
 import os
 
-# DEBUG: untuk memastikan versi terbaru terbaca
+# HARUS di baris paling atas sebelum perintah Streamlit lainnya
+st.set_page_config(page_title="Kualitas Air", layout="centered")
+
+# DEBUG versi deploy
 st.write("🔄 Versi terbaru 2025 ✅")
 
 # Load model dan scaler
@@ -11,9 +14,7 @@ kmeans = joblib.load('model_kmeans.pkl')
 scaler = joblib.load('scaler.pkl')
 label_map = joblib.load('label_map.pkl')
 
-# Konfigurasi halaman
-st.set_page_config(page_title="Kualitas Air", layout="centered")
-
+# Judul halaman
 st.title("💧 Pemantauan Kualitas Air Aquaponik")
 
 with st.form("input_form"):
@@ -38,7 +39,7 @@ if submitted:
         'Buruk': 'red'
     }
 
-    # Tampilkan status kualitas air
+    # Tampilkan status
     st.markdown(f"""
     <div style="padding: 1em; background-color: {warna[kualitas]}; color: white; border-radius: 8px; text-align: center;">
         <h4>Status Kualitas Air:</h4>
@@ -51,24 +52,24 @@ if submitted:
     st.write(f"**Suhu:** {suhu} °C")
     st.write(f"**TDS:** {tds} mg/L")
 
-    # Notifikasi + Rekomendasi
+    # Notifikasi dan Rekomendasi
     if kualitas == 'Buruk':
         st.error("⚠️ Kualitas air **BURUK** berdasarkan hasil model.")
         
         rekomendasi = []
 
         if ph < 6.5:
-            rekomendasi.append("- pH terlalu rendah. Tambahkan kapur (CaCO₃) atau air basa.")
+            rekomendasi.append("- pH terlalu rendah. Tambahkan kapur (CaCO₃) atau gunakan air basa.")
         elif ph > 8.5:
             rekomendasi.append("- pH terlalu tinggi. Tambahkan asam humat atau ganti sebagian air.")
 
         if suhu < 20:
-            rekomendasi.append("- Suhu terlalu rendah. Gunakan pemanas atau pindahkan ke lokasi lebih hangat.")
+            rekomendasi.append("- Suhu terlalu rendah. Gunakan pemanas atau tempatkan di lokasi lebih hangat.")
         elif suhu > 30:
-            rekomendasi.append("- Suhu terlalu tinggi. Tambahkan peneduh atau sistem pendingin.")
+            rekomendasi.append("- Suhu terlalu tinggi. Tambahkan peneduh atau gunakan sistem pendingin.")
 
         if tds > 1000:
-            rekomendasi.append("- TDS terlalu tinggi. Kurangi pakan ikan dan ganti sebagian air.")
+            rekomendasi.append("- TDS terlalu tinggi. Ganti sebagian air dan kurangi pemberian pakan.")
 
         if rekomendasi:
             st.markdown("#### 💡 Rekomendasi Perbaikan:")
